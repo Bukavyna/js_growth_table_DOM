@@ -27,6 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   removeRow.addEventListener('click', () => {
+    if (table.rows.length <= 2) {
+      return;
+    }
     table.deleteRow(-1);
 
     updateAppendRowButton();
@@ -43,6 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   removeColumn.addEventListener('click', () => {
+    const columnCount = table.rows[0]?.cells.length || 0;
+
+    if (columnCount <= 2) {
+      return;
+    }
+
     for (const row of table.rows) {
       row.deleteCell(-1);
     }
@@ -52,13 +61,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateAppendRowButton() {
     appendRow.disabled = table.rows.length >= 10;
-    removeRow.disabled = table.rows.length <= 2;
   }
 
   function updateAppendColumnButton() {
     const columnCount = table.rows[0]?.cells.length || 0;
 
     appendColumn.disabled = columnCount >= 10;
-    removeColumn.disabled = columnCount <= 2;
   }
 });
