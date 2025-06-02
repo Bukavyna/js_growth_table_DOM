@@ -18,54 +18,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
     for (let i = 0; i < columnCount; i++) {
       const newCell = document.createElement('td');
-
       newRow.appendChild(newCell);
     }
 
     table.appendChild(newRow);
-    updateAppendRowButton();
+    updateButtons();
   });
 
   removeRow.addEventListener('click', () => {
-    if (table.rows.length <= 2) {
-      return;
+    if (table.rows.length > 1) {
+      table.deleteRow(-1);
     }
-    table.deleteRow(-1);
 
-    updateAppendRowButton();
+    updateButtons();
   });
 
   appendColumn.addEventListener('click', () => {
     for (const row of table.rows) {
       const newCell = document.createElement('td');
-
       row.appendChild(newCell);
     }
 
-    updateAppendColumnButton();
+    updateButtons();
   });
 
   removeColumn.addEventListener('click', () => {
     const columnCount = table.rows[0]?.cells.length || 0;
 
-    if (columnCount <= 2) {
-      return;
+    if (columnCount > 1) {
+      for (const row of table.rows) {
+        row.deleteCell(-1);
+      }
     }
 
-    for (const row of table.rows) {
-      row.deleteCell(-1);
-    }
-
-    updateAppendColumnButton();
+    updateButtons();
   });
 
-  function updateAppendRowButton() {
-    appendRow.disabled = table.rows.length >= 10;
-  }
-
-  function updateAppendColumnButton() {
+  function updateButtons() {
+    const rowCount = table.rows.length;
     const columnCount = table.rows[0]?.cells.length || 0;
 
+    appendRow.disabled = rowCount >= 10;
+    removeRow.disabled = rowCount <= 2;
+
     appendColumn.disabled = columnCount >= 10;
+    removeColumn.disabled = columnCount <= 2;
   }
+
+  updateButtons();
 });
